@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RegexConvert | Automata Engineering Workbench</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">R<span>×</span></div><div><strong>RegexConvert</strong><small>FORMAL LANGUAGE WORKBENCH</small></div></div>
+    <div class="side-label">WORKSPACE</div>
+    <button class="nav-item active" data-view="workbench"><span>⌘</span> Processing workbench</button>
+    <button class="nav-item" data-view="validator"><span>✓</span> String validation</button>
+    <button class="nav-item" data-view="equivalence"><span>⇄</span> Equivalence lab</button>
+    <button class="nav-item" data-view="reverse"><span>↶</span> Automaton → regex</button>
+    <div class="side-label">REFERENCE</div>
+    <button class="nav-item" data-view="guide"><span>i</span> Syntax & algorithms</button>
+    <div class="sidebar-bottom"><div class="status-dot"></div><div><strong>Local engine</strong><small id="healthText">Checking service…</small></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><div class="eyebrow">FORMAL LANGUAGE PROCESSING · COMPILER PIPELINE</div><h1 id="pageTitle">RegexConvert Workbench</h1></div><div class="top-actions"><span class="pill"><i></i> ENGINE READY</span><button class="btn btn-quiet" id="exportBtn">Export report ↗</button></div></header>
+    <section class="view active" id="view-workbench">
+      <div class="intro"><div><h2>Explore the language behind a pattern.</h2><p>Analyze a formal expression, construct equivalent automata, derive reverse representations, and verify string membership.</p></div><div class="intro-chip">RE <b>→</b> NFA <b>→</b> DFA</div></div>
+      <section class="module-overview" aria-label="Three functional modules">
+        <div class="module-card"><span class="module-index">MODULE 01</span><b>Expression Analysis & Automata Generation</b><p>Tokenization · Parsing · AST · Thompson NFA · Subset DFA · Minimization</p></div>
+        <div class="module-card"><span class="module-index">MODULE 02</span><b>Reverse Conversion & Equivalence</b><p>State elimination · Regex derivation · Product-state comparison · Witness string</p></div>
+        <div class="module-card"><span class="module-index">MODULE 03</span><b>String Recognition & Visualization</b><p>Input testing · Transition trace · Acceptance decision · SVG automata</p></div>
+      </section>
+      <section class="compiler-map panel"><div class="panel-head compact"><div><div class="eyebrow">COMPILER DESIGN INTEGRATION</div><h3>Processing pipeline and implemented concepts</h3></div><span class="tiny-tag">INTERNAL ENGINE</span></div>
+        <div class="compiler-steps">
+          <div><b>01 · Lexical analysis</b><small>Tokenizes literals, operators and parentheses</small></div><div><b>02 · Syntax analysis</b><small>Checks grammar, precedence and builds AST</small></div><div><b>03 · Syntax-directed translation</b><small>Uses AST nodes to construct Thompson fragments</small></div><div><b>04 · Intermediate representation</b><small>Stores NFA/DFA states, alphabets and transitions</small></div><div><b>05 · Transformation & optimization</b><small>Subset construction and DFA minimization</small></div><div><b>06 · Diagnostics</b><small>Reports malformed expressions and invalid automata</small></div>
++        </div>
++      </section>
+      <div class="grid-main">
+        <section class="panel input-panel">
+          <div class="panel-head"><div><div class="eyebrow">01 / SOURCE</div><h3>Regular expression</h3></div><span class="tiny-tag">FORMAL RE SYNTAX</span></div>
+          <label for="regexInput">Expression</label>
+          <div class="regex-row"><input id="regexInput" value="(a|b)*abb" spellcheck="false"><button class="btn btn-primary" id="compileBtn">Compile pattern <span>→</span></button></div>
+          <div class="hint">Operators: <code>|</code> union · implicit concatenation · <code>*</code> Kleene star · <code>+</code> one-or-more · <code>?</code> optional · <code>ε</code> epsilon · <code>∅</code> empty language</div>
+          <div class="examples"><span>Try:</span><button class="example" data-value="(a|b)*abb">(a|b)*abb</button><button class="example" data-value="(0|1)*011">(0|1)*011</button><button class="example" data-value="a(b|c)*">a(b|c)*</button><button class="example" data-value="(ab|ba)+">(ab|ba)+</button></div>
+          <section class="language-card" aria-live="polite"><div class="eyebrow">LANGUAGE DESCRIPTION</div><h4 id="languageTitle">Language over Σ = {a, b}</h4><p id="languageDescription">All strings over the alphabet Σ = {a, b} that end with <strong>abb</strong>.</p><p class="language-examples"><b>Examples:</b> <code>abb</code> · <code>aabb</code> · <code>babb</code> <span class="muted">| Rejected:</span> <code>aba</code></p></section>
+          <div class="divider"></div>
+          <div class="panel-head compact"><div><div class="eyebrow">02 / PIPELINE</div><h3>Compilation stages</h3></div><span id="compileTime" class="muted small">Not compiled</span></div>
+          <div class="stage-list" id="stageList">
+            <div class="stage"><span class="stage-num">01</span><div><b>Tokenization</b><small>Recognize operators and literals</small></div><em>Waiting</em></div>
+            <div class="stage"><span class="stage-num">02</span><div><b>Syntax analysis</b><small>Validate grammar and build AST</small></div><em>Waiting</em></div>
+            <div class="stage"><span class="stage-num">03</span><div><b>Thompson construction</b><small>Generate epsilon-NFA</small></div><em>Waiting</em></div>
+            <div class="stage"><span class="stage-num">04</span><div><b>Subset construction</b><small>Generate deterministic automaton</small></div><em>Waiting</em></div>
+            <div class="stage"><span class="stage-num">05</span><div><b>DFA minimization</b><small>Reduce equivalent states</small></div><em>Waiting</em></div>
+          </div>
+        </section>
+        <section class="panel result-panel">
+          <div class="panel-head"><div><div class="eyebrow">03 / INTERMEDIATE REPRESENTATIONS</div><h3>Automata explorer</h3></div><div class="segmented"><button class="seg active" data-auto="nfa">NFA</button><button class="seg" data-auto="dfa">DFA</button><button class="seg" data-auto="minimized_dfa">Minimized</button></div></div>
+          <div class="stats" id="stats"><div><small>NFA states</small><strong>—</strong></div><div><small>DFA states</small><strong>—</strong></div><div><small>Minimized</small><strong>—</strong></div><div><small>Compile time</small><strong>—</strong></div></div>
+          <div class="graph-wrap" id="graphWrap"><div class="empty-state"><div class="empty-icon">⌘</div><b>Your automaton will appear here</b><p>Compile a pattern to inspect states and transitions.</p></div></div>
+          <div class="graph-foot"><span id="graphLabel">Awaiting compilation</span><button class="btn btn-small btn-quiet" id="downloadSvg">Download SVG ↓</button></div>
+          <div class="divider"></div>
+          <div class="panel-head compact"><div><div class="eyebrow">04 / PARSE OUTPUT</div><h3>Lexical tokens & abstract syntax tree</h3></div></div>
+          <div class="token-list" id="tokenList"><span class="muted">Compile a pattern to inspect tokens.</span></div>
+          <details class="ast-details"><summary>Inspect abstract syntax tree (JSON)</summary><pre id="astOutput">No syntax tree yet.</pre></details>
+        </section>
+      </div>
+      <section class="panel validation-panel">
+        <div class="panel-head"><div><div class="eyebrow">05 / LANGUAGE RECOGNITION</div><h3>String validation lab</h3></div><span class="tiny-tag">BATCH TESTING</span></div>
+        <div class="validation-form"><div class="field-grow"><label for="stringsInput">Input strings — one per line</label><textarea id="stringsInput" rows="3">abb
+aabb
+babb
+ab
+aba</textarea></div><button class="btn btn-primary" id="validateBtn">Run validation →</button></div>
+        <div class="results-summary" id="resultsSummary"></div><div class="table-wrap"><table><thead><tr><th>Input string</th><th>Result</th><th>Transition trace</th></tr></thead><tbody id="resultsBody"><tr><td colspan="3" class="muted">Compile a pattern and run validation.</td></tr></tbody></table></div>
+      </section>
+    </section>
+    <section class="view" id="view-validator">
+      <div class="intro"><div><h2>Module 03 · String recognition</h2><p>Run a batch of strings against the current regular expression and inspect the execution trace.</p></div></div>
+      <section class="panel"><label for="validatorPattern">Regular expression</label><div class="regex-row"><input id="validatorPattern" value="(a|b)*abb"><button class="btn btn-primary" id="validatorCompile">Compile & validate →</button></div><label for="validatorStrings">Test strings (one per line)</label><textarea id="validatorStrings" rows="7">abb
+aabb
+babb
+ab
+aba
+</textarea><div id="validatorResults"></div></section>
+    </section>
+    <section class="view" id="view-equivalence">
+      <div class="intro"><div><h2>Module 02 · Language equivalence</h2><p>Compare two regular expressions. If their languages differ, the engine returns a distinguishing string.</p></div></div>
+      <section class="panel"><div class="two-fields"><div><label for="leftRegex">Expression A</label><input id="leftRegex" value="a*b"></div><div><label for="rightRegex">Expression B</label><input id="rightRegex" value="a* b"></div></div><button class="btn btn-primary" id="equivBtn">Compare languages →</button><div id="equivResult" class="notice hidden"></div></section>
+    </section>
+    <section class="view" id="view-reverse">
+      <div class="intro"><div><h2>Module 02 · Reverse conversion</h2><p>Import a finite automaton as JSON and derive an equivalent regular expression using state elimination.</p></div></div>
+      <section class="panel"><div class="panel-head"><div><div class="eyebrow">MODULE 02 · STRING PATTERN DERIVATION</div><h3>String → regular expression</h3></div><span class="tiny-tag">EXACT-LANGUAGE CONVERSION</span></div><p class="hint">Enter a literal string. The system constructs a concatenation of escaped literal symbols. The resulting regular expression recognizes the singleton language containing exactly that string—not every string in a broader pattern class.</p><label for="literalString">Input string</label><div class="regex-row"><input id="literalString" value="1011" spellcheck="false" placeholder="e.g. 1011"><button class="btn btn-primary" id="literalToRegexBtn">Convert string → regex</button></div><div id="literalRegexResult"></div><div class="divider"></div><div class="panel-head"><div><div class="eyebrow">MODULE 02 · STATE-ELIMINATION TRANSLATION</div><h3>Automaton → regular expression</h3></div><button class="btn btn-quiet btn-small" id="loadSampleAutomaton">Load sample automaton</button></div><p class="hint">For a full language conversion, provide a finite automaton as JSON. The system uses state elimination to derive an equivalent regular expression.</p><textarea id="automatonJson" rows="8" spellcheck="false"></textarea><div class="actions-row"><label class="btn btn-quiet file-label">Upload JSON<input type="file" id="automatonFile" accept=".json,application/json"></label><button class="btn btn-primary" id="reverseBtn">Generate regular expression →</button></div><div id="reverseResult"></div></section>
+    </section>
+    <section class="view" id="view-guide">
+      <div class="intro"><div><h2>Formal syntax & compiler algorithms</h2><p>A concise reference for the supported formal regular-expression language and conversion methods.</p></div></div>
+      <div class="guide-grid">
+        <section class="panel"><h3>Supported syntax</h3><table><tbody><tr><td><code>a</code></td><td>Literal symbol</td></tr><tr><td><code>ab</code></td><td>Concatenation</td></tr><tr><td><code>a|b</code></td><td>Alternation / union</td></tr><tr><td><code>a*</code></td><td>Zero or more</td></tr><tr><td><code>a+</code></td><td>One or more</td></tr><tr><td><code>a?</code></td><td>Optional</td></tr><tr><td><code>ε</code></td><td>Empty string</td></tr><tr><td><code>∅</code></td><td>Empty language</td></tr><tr><td><code>\|</code></td><td>Escape special literal characters</td></tr></tbody></table><p class="hint">Whitespace is ignored. This is formal regex syntax, not JavaScript/Python regex syntax; character classes and anchors are not supported.</p></section>
+        <section class="panel"><h3>Algorithms used</h3><ol class="algorithm-list"><li><b>Tokenizer + parser</b><small>Creates tokens and an abstract syntax tree.</small></li><li><b>Thompson's construction</b><small>Builds an epsilon-NFA from the expression tree.</small></li><li><b>Subset construction</b><small>Uses epsilon-closure and state sets to construct a DFA.</small></li><li><b>Partition refinement</b><small>Minimizes a complete DFA.</small></li><li><b>State elimination</b><small>Generates a regular expression from a GNFA.</small></li><li><b>Product-automaton BFS</b><small>Checks equivalence and finds a distinguishing string.</small></li></ol></section>
+      </div>
+    </section>
+    <footer><span>RegexConvert · Formal Language Workbench</span><span>Formal methods, made inspectable.</span></footer>
+  </main>
+</div>
+<div id="toast" class="toast" role="status"></div>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body></html>
